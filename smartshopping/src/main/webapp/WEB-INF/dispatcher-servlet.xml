@@ -14,7 +14,10 @@
     http://www.springframework.org/schema/webflow-config/spring-webflow-config.xsd        
     ">
 
-	<context:component-scan base-package="net.spvra.smartshopping"/>
+	<context:component-scan base-package="net.spvra.smartshopping.controller"/>
+    	<context:component-scan base-package="net.spvra.shoppingbackend.daoimpl"/>
+
+
 
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">

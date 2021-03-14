@@ -32,6 +32,9 @@
 <!-- Bootstrap Core CSS -->
 <link href="${css}/bootstrap.min.css" rel="stylesheet">
 
+<!-- Bootstrap readable theme CSS -->
+<link href="${css}/bootstrap-readable-theme.css" rel="stylesheet">
+
 <!-- Custom CSS -->
 <link href="${css}/myapp.css" rel="stylesheet">
 
@@ -48,7 +51,7 @@
 
 	<div class="wrapper">
 
-		<!-- Navigation -->
+		<!-- Navigation bar -->
 		<%@include file="./shared/navbar.jsp"%>
 
 		<!-- Page Content -->
@@ -70,7 +73,12 @@
 				<%@include file="contact.jsp"%>
 			</c:if>
 
-
+         <!-- Load only when user clicks all product or category product -->
+			<c:if test="${userClickAllProducts == true or userClickCategoryProducts == true}">
+				<%@include file="listProducts.jsp"%>
+			</c:if>
+         
+         
 
 		</div>
 

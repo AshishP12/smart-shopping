@@ -18,7 +18,13 @@
 
 	<dependencies>
 
-		<dependency>
+     <dependency>
+			<groupId>net.spvra</groupId>
+	 <artifactId>shoppingbackend</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
+	<dependency>
 			<groupId>org.apache.tomee</groupId>
 			<artifactId>javaee-api</artifactId>
 			<version>${version}</version>
