@@ -1,6 +1,7 @@
 package net.spvra.smartshopping.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,9 +11,10 @@ import net.spvra.shoppingbackend.dao.CategoryDAO;
 import net.spvra.shoppingbackend.dto.Category;
 
 @Controller
+@ComponentScan("net.spvra.shoppingbackend")
 public class PageController {
 	
-	@Autowired
+	@Autowired(required=true)
 	private CategoryDAO categoryDAO;
 	
 	

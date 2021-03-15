@@ -2,8 +2,8 @@
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xmlns:wf="http://www.springframework.org/schema/webflow-config"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
     http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans.xsd
     http://www.springframework.org/schema/context
@@ -14,23 +14,60 @@
     http://www.springframework.org/schema/webflow-config/spring-webflow-config.xsd        
     ">
 
-	<context:component-scan base-package="net.spvra.smartshopping.controller"/>
-    	<context:component-scan base-package="net.spvra.shoppingbackend.daoimpl"/>
+	<context:component-scan
+		base-package="net.spvra.smartshopping.controller" />
+	<context:component-scan
+		base-package="net.spvra.shoppingbackend.daoimpl" />
 
 
 
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		
+
 		<property name="prefix" value="/WEB-INF/views/" />
 		<property name="suffix" value=".jsp" />
-		
+
 	</bean>
-	
+
 	<!-- Loading static Resources -->
-	<mvc:annotation-driven/>
-	
-	<mvc:resources location="/assets/" mapping="/resources/**" />
-	
-	
+	<mvc:annotation-driven />
+
+	<mvc:resources location="/assets/"
+		mapping="/resources/**" />
+
+<bean id="entityManagerFactory"
+	class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+	<property name="packagesToScan" value="models" />
+	<property name="dataSource" ref="myDataSource" />
+
+	<property name="jpaProperties">
+		<props>
+			<prop key="hibernate.show_sql">true</prop>
+			<prop key="hibernate.hbm2ddl.auto">update</prop>
+			<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+		</props>
+	</property>
+
+	<property name="persistenceProvider">
+		<bean class="org.hibernate.jpa.HibernatePersistenceProvider"></bean>
+	</property>
+
+</bean>
+
+
+
+
+
+
+
+
+
+
 </beans>
+
+
+
+
+
+
+
