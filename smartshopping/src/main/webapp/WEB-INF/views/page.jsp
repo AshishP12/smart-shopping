@@ -7,7 +7,8 @@
 <spring:url var="js" value="/resources/js" />
 <spring:url var="images" value="/resources/images" />
 
-<c:set var="contextRoot" value="${pageContext.request.contextPath}" />
+<c:set var="contextRoot" value="${pageContext.request.contextPath }" />
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -24,6 +25,7 @@
 
 <script>
 	window.menu = '${title}';
+	window.contextRoot = '${contextRoot}';
 </script>
 
 
@@ -34,6 +36,9 @@
 
 <!-- Bootstrap readable theme CSS -->
 <link href="${css}/bootstrap-readable-theme.css" rel="stylesheet">
+
+<!-- Bootstrap dataTables -->
+<link href="${css}/dataTables.bootstrap.css" rel="stylesheet">
 
 <!-- Custom CSS -->
 <link href="${css}/myapp.css" rel="stylesheet">
@@ -51,7 +56,7 @@
 
 	<div class="wrapper">
 
-		<!-- Navigation bar -->
+		<!-- Navigation -->
 		<%@include file="./shared/navbar.jsp"%>
 
 		<!-- Page Content -->
@@ -73,18 +78,29 @@
 				<%@include file="contact.jsp"%>
 			</c:if>
 
-         <!-- Load only when user clicks all product or category product -->
+			<!-- Load only when user clicks single category -->
 			<c:if test="${userClickAllProducts == true or userClickCategoryProducts == true}">
 				<%@include file="listProducts.jsp"%>
 			</c:if>
-         
-         
+
+			<!-- Load only when user clicks view (eye) button -->
+			<c:if test="${userClickShowProduct == true }">
+				<%@include file="singleProduct.jsp"%>
+			</c:if>
+			
+			<!-- Load only when user clicks Manage products button -->
+			<c:if test="${userClickManageProduct == true }">
+				<%@include file="manageProducts.jsp"%>
+			</c:if>
+			
+			
 
 		</div>
 
 
 		<!-- Footer comes here -->
 		<%@include file="./shared/footer.jsp"%>
+		
 
 		<!-- jQuery -->
 		<script src="${js}/jquery.js"></script>
@@ -92,7 +108,12 @@
 
 		<!-- Bootstrap Core JavaScript -->
 		<script src="${js}/bootstrap.min.js"></script>
-
+		
+		<!-- Database plugin -->
+		<script src="${js}/jquery.dataTables.js"></script>
+		
+		<!-- dataTable Bootstrap Script -->
+		<script src="${js}/dataTables.bootstrap.js"></script>
 
 		<!-- Self coded javascript -->
 		<script src="${js}/myapp.js"></script>

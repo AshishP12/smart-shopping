@@ -1,5 +1,4 @@
-
-   <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+ <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
@@ -17,18 +16,21 @@
                     <li id="about">
                         <a href="${contextRoot}/about">About</a>
                     </li>
-                    
+                    <li id="listProducts">
+                        <a href="${contextRoot}/show/all/products">View Products</a>
+                    </li>
                     <li id="contact">
                         <a href="${contextRoot}/contact">Contact</a>
                     </li>
                     
-                    <li id="listProducts">
-                        <a href="${contextRoot}/show/all/products">View Products</a>
+                      <li id="manageProduct">
+                        <a href="${contextRoot}/manage/product">Manage Product</a>
                     </li>
-                    
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
         </div>
         <!-- /.container -->
     </nav>
+
+    
