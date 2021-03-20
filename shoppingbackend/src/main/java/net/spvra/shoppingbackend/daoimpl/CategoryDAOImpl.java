@@ -39,7 +39,7 @@ public class CategoryDAOImpl implements CategoryDAO {
 		return sessionFactory.getCurrentSession().get(Category.class, Integer.valueOf(id));
 
 	}
-
+ 
 	@Override
 
 	public boolean add(Category category) {

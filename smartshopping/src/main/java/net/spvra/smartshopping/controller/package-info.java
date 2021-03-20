@@ -1,1 +1,0 @@
-package net.spvra.smartshopping.controller;

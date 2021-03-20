@@ -1,5 +1,8 @@
 package net.spvra.smartshopping.controller;
 
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Controller;
@@ -8,16 +11,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import net.spvra.shoppingbackend.dao.CategoryDAO;
+import net.spvra.shoppingbackend.dao.ProductDAO;
 import net.spvra.shoppingbackend.dto.Category;
+import net.spvra.shoppingbackend.dto.Product;
+import net.spvra.smartshopping.exception.ProductNotFoundException;
 
 @Controller
 @ComponentScan("net.spvra.shoppingbackend")
 public class PageController {
 	
+	private static final Logger logger = LoggerFactory.getLogger(PageController.class);
+	
+	
 	@Autowired(required=true)
-	private CategoryDAO categoryDAO;
+	private CategoryDAO categoryDAO ;
 	
-	
+	@Autowired
+	private ProductDAO productDAO ;
 	
 	@RequestMapping(value = {"/" , "/home" , "/index"})
 	public ModelAndView index()
@@ -25,7 +35,10 @@ public class PageController {
 		ModelAndView mv = new ModelAndView("page");
 		mv.addObject("title", "Home");
 		
-		//PASSINGLIST FROM BACKENDPROJECT
+		logger.info("Inside PageController index method -INFO");
+		logger.debug("Inside PageController index method -DEBUG");
+		
+		//adding the list of categories here
 		mv.addObject("categories", categoryDAO.list());
 		
 		mv.addObject("userClickHome", true);
@@ -56,44 +69,68 @@ public class PageController {
 	}
 	
 	
-	/*
-	 * Methods to load all the products and based on category
-	 * */
-	
-	@RequestMapping(value = "/show/all/products")
-	public ModelAndView showAllProducts() {		
-		ModelAndView mv = new ModelAndView("page");		
-		mv.addObject("title","All Products");
+	//method to load all the products
+	@RequestMapping(value = {"/show/all/products"})
+	public ModelAndView showAllProducts()
+	{
+		ModelAndView mv = new ModelAndView("page");
+		mv.addObject("title", "All Products");
 		
-		//passing the list of categories
+		//adding the list of categories here
 		mv.addObject("categories", categoryDAO.list());
 		
-		mv.addObject("userClickAllProducts",true);
-		return mv;				
-	}	
+		mv.addObject("userClickAllProducts", true);
+		
+		return mv;
+	}
 	
-	@RequestMapping(value = "/show/category/{id}/products")
-	public ModelAndView showCategoryProducts(@PathVariable("id") int id) {		
+	//method to load the products based on the category
+	@RequestMapping(value = {"/show/category/{id}/products"})
+	public ModelAndView showCategoryProducts(@PathVariable("id") int id)
+	{
 		ModelAndView mv = new ModelAndView("page");
 		
-		// categoryDAO to fetch a single category
+		//to fetch the title based on the category id, we are using categoryDAO object
 		Category category = null;
 		
-		category = categoryDAO.get(id);
+		category = categoryDAO.get(id); //for this we have made a new method in CategoryDAO to fetch the id
 		
-		mv.addObject("title",category.getName());
+		mv.addObject("title", category.getName()); //getting the name of the single category
 		
-		//passing the list of categories
+		//adding the list of categories here
 		mv.addObject("categories", categoryDAO.list());
 		
-		// passing the single category object
-		mv.addObject("category", category);
+		//passing the single category object
+		mv.addObject("category", category); // on the right side it is single category which is mapped into "category object"
 		
-		mv.addObject("userClickCategoryProducts",true);
-		return mv;				
-	}	
+		mv.addObject("userClickCategoryProducts", true);
+		
+		return mv;
+	}
+
+	// VIEWING A SINGLE PRODUCT
 	
-	
+	@RequestMapping(value = "/show/{id}/product")
+	public ModelAndView showSingleProduct(@PathVariable int id) throws ProductNotFoundException {
+		
+		ModelAndView mv = new ModelAndView("page");
+		
+		Product product = productDAO.get(id);
+		
+		//if product not found
+		if(product == null) throw new ProductNotFoundException();
+		
+		//update the view count
+		product.setViews(product.getViews() + 1);
+		productDAO.update(product);
+		
+		mv.addObject("title", product.getName());
+		mv.addObject("product", product);
+		
+		mv.addObject("userClickShowProduct", true);
+		
+		return mv;
+	}
 	
 	
 	

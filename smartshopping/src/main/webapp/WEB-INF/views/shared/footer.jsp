@@ -1,4 +1,4 @@
-    <div class="container footer">
+<div class="container footer">
 
         <hr>
 
@@ -6,7 +6,7 @@
         <footer>
             <div class="row">
                 <div class="col-lg-12">
-                    <p>Copyright &copy; Smart Shopping 2021 - Designed and Developed By SPVRA</p>
+                    <p>Copyright &copy; Designed and developed by SPVRA</p>
                 </div>
             </div>
         </footer>
