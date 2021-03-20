@@ -8,11 +8,11 @@ public interface CategoryDAO {
 
 	
 	
-	Category get(int id);
-	List<Category> list();
-	boolean add(Category category);
-	boolean update(Category category);
-	boolean delete(Category category);
+	Category get(int id); //single select
+	List<Category> list(); //multi select
+	boolean add(Category category); //insert
+	boolean update(Category category); //update
+	boolean delete(Category category); //delete
 	
 	
 }

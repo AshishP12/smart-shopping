@@ -6,7 +6,6 @@ import javax.sql.DataSource;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -17,11 +16,11 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBuilder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@ComponentScan(basePackages = { "net.spvra.shoppingbackend.dto" })
+@ComponentScan(basePackages={"net.spvra.shoppingbackend.dto"})
 @EnableTransactionManagement
 @PropertySource("classpath:connection.properties")
 public class HibernateConfig {
-
+	
 	@Value("${jdbc.url}")
 	private String DATABASE_URL;
 	@Value("${jdbc.driver}")
@@ -32,7 +31,6 @@ public class HibernateConfig {
 	private String DATABASE_USERNAME;
 	@Value("${jdbc.password}")
 	private String DATABASE_PASSWORD;
-
 
 	// dataSource bean will be available
 	@Bean("dataSource")
@@ -50,13 +48,6 @@ public class HibernateConfig {
 		return dataSource;
 		
 	}
-
-	
-	
-	
-	
-	
-	
 	
 	// sessionFactory bean will be available
 	
@@ -92,10 +83,8 @@ public class HibernateConfig {
 	
 	// transactionManager bean
 	@Bean
-	@Autowired
 	public HibernateTransactionManager getTransactionManager(SessionFactory sessionFactory) {
-		HibernateTransactionManager transactionManager = new HibernateTransactionManager();
-		transactionManager.setSessionFactory(sessionFactory);
+		HibernateTransactionManager transactionManager = new HibernateTransactionManager(sessionFactory);
 		return transactionManager;
 	}
 	
