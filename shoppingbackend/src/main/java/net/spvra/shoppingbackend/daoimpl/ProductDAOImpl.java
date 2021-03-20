@@ -25,9 +25,7 @@ public class ProductDAOImpl implements ProductDAO {
 	@Override
 	public Product get(int productId) {
 		try {			
-			return sessionFactory
-					.getCurrentSession()
-						.get(Product.class,Integer.valueOf(productId));			
+			return sessionFactory.getCurrentSession().get(Product.class,Integer.valueOf(productId));			
 		}
 		catch(Exception ex) {		
 			ex.printStackTrace();			
@@ -41,10 +39,7 @@ public class ProductDAOImpl implements ProductDAO {
 	
 	@Override
 	public List<Product> list() {
-		return sessionFactory
-				.getCurrentSession()
-					.createQuery("FROM Product" , Product.class)
-						.getResultList();
+		return sessionFactory.getCurrentSession().createQuery("FROM Product" , Product.class).getResultList();
 	}
 
 	/*
@@ -53,9 +48,7 @@ public class ProductDAOImpl implements ProductDAO {
 	@Override
 	public boolean add(Product product) {
 		try {			
-			sessionFactory
-					.getCurrentSession()
-						.persist(product);
+			sessionFactory.getCurrentSession().persist(product);
 			return true;
 		}
 		catch(Exception ex) {		

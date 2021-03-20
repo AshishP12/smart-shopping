@@ -74,11 +74,12 @@ public class CategoryDAOImpl implements CategoryDAO {
 	@Override
 	public boolean delete(Category category) {
 		
-		category.setActive(false);
-		
+		category.setActive(false); //setting the particular category to false so that it dosen't gets deleted.
+								//we are just marking the flag as true or false
 		try {
 			// add the category to the database table
-			sessionFactory.getCurrentSession().update(category);
+			sessionFactory.getCurrentSession().update(category); //here on the particular category only update will be there 
+																						
 			return true;
 		} catch (Exception ex) {
 			ex.printStackTrace();

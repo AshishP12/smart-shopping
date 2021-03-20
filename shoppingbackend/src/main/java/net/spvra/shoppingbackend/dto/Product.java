@@ -63,7 +63,7 @@ public class Product implements Serializable {
 	}
 
 
-	// default constructor
+	// default constructor, code to generate the random product code
 	public Product() {
 		
 		this.code = "PRD" + UUID.randomUUID().toString().substring(26).toUpperCase();
