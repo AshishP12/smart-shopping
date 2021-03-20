@@ -4,7 +4,6 @@
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap/blob/gh-pages/LICENSE)
  */
 
-
 html {
 	height:100%;
 }
@@ -81,6 +80,20 @@ footer {
 	bottom:15px;
 	height: 60px;
 	
+}
+
+.dataTableImg
+{
+	
+	width:100px;
+	height:100px;
+	
+	
+}
+
+.help-block{
+	
+	color: #ff0000;
 }
 
 
