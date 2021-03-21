@@ -120,6 +120,19 @@ $(function() {
 	}
 					
 					
+	//dismissing alert after 3 second
+	var $alert=$('.alert');
+	
+	if($alert.length){
+	
+	setTimeout(function() {
+	$alert.fadeOut('slow');
+	
+	},3000)
+	
+	}
+	
+	
 					
 	
 });
