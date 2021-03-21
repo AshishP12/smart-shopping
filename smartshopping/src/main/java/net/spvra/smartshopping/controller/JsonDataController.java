@@ -1,5 +1,6 @@
 package net.spvra.smartshopping.controller;
 
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +20,17 @@ public class JsonDataController {
 	private ProductDAO productDAO ;
 	
 	
-	@RequestMapping("/admin/all/products")
+	@RequestMapping("/all/products")
 	@ResponseBody
 	public List<Product> getAllProducts() {
+		
+		return productDAO.listActiveProducts();
+		
+	}
+	
+	@RequestMapping("/admin/all/products")
+	@ResponseBody
+	public List<Product> getAllProductsForAdmin() {
 		
 		return productDAO.list();
 		
