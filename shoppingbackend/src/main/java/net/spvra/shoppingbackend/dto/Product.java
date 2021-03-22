@@ -33,12 +33,14 @@ public class Product implements Serializable {
 	private String name;
 	@NotBlank(message = "Please enter the brand name!")
 	private String brand;
+	@JsonIgnore
 	@NotBlank(message = "Please enter the description!")
 	private String description;
 	@Column(name = "unit_price")
-	@Min(value = 1, message="Please select at least one value!")
+	@Min(value = 1, message="Prize can't be less than 1!")
 	private double unitPrice;
 	private int quantity;
+
 	@Column(name = "is_active")	
 	private boolean active;
 	@Column(name = "category_id")
