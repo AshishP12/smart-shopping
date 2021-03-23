@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 import net.spvra.smartshopping.model.UserModel;
 import net.spvra.shoppingbackend.dao.UserDAO;
-import net.spvra.shoppingbackend.dto.Cart;
+
 import net.spvra.shoppingbackend.dto.User;
 
 @ControllerAdvice
