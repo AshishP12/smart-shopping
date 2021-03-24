@@ -2,6 +2,7 @@ package net.spvra.smartshopping.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -11,96 +12,152 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import net.spvra.shoppingbackend.dao.CategoryDAO;
 import net.spvra.shoppingbackend.dao.ProductDAO;
 import net.spvra.shoppingbackend.dto.Category;
 import net.spvra.shoppingbackend.dto.Product;
+import net.spvra.smartshopping.util.FileUploadUtility;
+import net.spvra.smartshopping.validator.ProductValidator;
+
 
 @Controller
 @RequestMapping("/manage")
 public class ManagementController {
-	
-	@Autowired
-	private CategoryDAO categoryDAO;
-	
+
+	private static final Logger logger = LoggerFactory.getLogger(ManagementController.class);
+
 	@Autowired
 	private ProductDAO productDAO;
 	
-	
-	private static final Logger logger =  LoggerFactory.getLogger(ManagementController.class);
-	
-	
-	@RequestMapping(value= "/product", method=RequestMethod.GET) //for displaying the data in the form
-	public ModelAndView showManageProducts(@RequestParam(name="operation" , required=false) String operation) {
-		
-		
+	@Autowired
+	private CategoryDAO categoryDAO;		
+
+	@RequestMapping("/product")
+	public ModelAndView manageProduct(@RequestParam(name="success",required=false)String success) {		
 
 		ModelAndView mv = new ModelAndView("page");	
 		mv.addObject("title","Product Management");		
 		mv.addObject("userClickManageProduct",true);
 		
 		Product nProduct = new Product();
-		nProduct.setSupplierId(1); //1 is for admin 
-		nProduct.setActive(true); //assuming the admin entered the product is active
 		
-		mv.addObject("product", nProduct); //adding the new product here
+		// assuming that the user is ADMIN
+		// later we will fixed it based on user is SUPPLIER or ADMIN
+		nProduct.setSupplierId(1);
+		nProduct.setActive(true);
+
+		mv.addObject("product", nProduct);
+
 		
-		if(operation != null)
-		{
-			if(operation.equals("product"))
-			{
-				mv.addObject("message", "Product details submitted successfully");
+		if(success != null) {
+			if(success.equals("product")){
+				mv.addObject("message", "Product submitted successfully!");
+			}	
+			else if (success.equals("category")) {
+				mv.addObject("message", "Category submitted successfully!");
 			}
 		}
-		
-		
-		
+			
 		return mv;
+		
 	}
 
 	
+	@RequestMapping("/{id}/product")
+	public ModelAndView manageProductEdit(@PathVariable int id) {		
+
+		ModelAndView mv = new ModelAndView("page");	
+		mv.addObject("title","Product Management");		
+		mv.addObject("userClickManageProduct",true);
+		
+		// Product nProduct = new Product();		
+		mv.addObject("product", productDAO.get(id));
+
+			
+		return mv;
+		
+	}
 	
-	//returning categories for all the request mapping
-	  @ModelAttribute("categories")
-	  public List<Category> getCategories() {
-		  
-		  return categoryDAO.list();
-	  
-	  }
-	  
-	  //handling product submission
-	  @RequestMapping(value="/product", method=RequestMethod.POST) //called when submit button is clicked
-	  public String handleProductSubmission(@Valid  @ModelAttribute("product") Product mProduct , 
-			                             BindingResult results, Model model) //here model is used to pass any data to the view
-	  
-	  	{
-		  
-		  //checking if there are any errors
-		  if(results.hasErrors())
-		  {
-			 
-			  model.addAttribute("userClickManageProduct",true);
-			  model.addAttribute("title","Product Management");
-			  model.addAttribute("message", "validation failed for product submission!");
-			  
-			  
-			  return "page"; //we have not used redirect here because then the error wont get displayed
-		  }
-		  
-		  
-		  logger.info(mProduct.toString());
-		  
-		  //create a new product record
-		  productDAO.add(mProduct);
-		  
-		  
-		  return "redirect:/manage/product?operation=product"; //here redirect because we needed to go to a new url
-		 
-	  }
-	 
+	
+	@RequestMapping(value = "/product", method=RequestMethod.POST)
+	public String managePostProduct(@Valid @ModelAttribute("product") Product mProduct, 
+			BindingResult results, Model model, HttpServletRequest request) {
+		
+		// mandatory file upload check
+		if(mProduct.getId() == 0) {
+			new ProductValidator().validate(mProduct, results);
+		}
+		else {
+			// edit check only when the file has been selected
+			if(!mProduct.getFile().getOriginalFilename().equals("")) {
+				new ProductValidator().validate(mProduct, results);
+			}			
+		}
+		
+		if(results.hasErrors()) {
+			model.addAttribute("message", "Validation fails for adding the product!");
+			model.addAttribute("userClickManageProduct",true);
+			return "page";
+		}			
+
+		
+		if(mProduct.getId() == 0 ) {
+			productDAO.add(mProduct);
+		}
+		else {
+			productDAO.update(mProduct);
+		}
+	
+		 //upload the file
+		 if(!mProduct.getFile().getOriginalFilename().equals("") ){
+			 FileUploadUtility.uploadFile(request, mProduct.getFile(), mProduct.getCode()); 
+		 }
+		
+		return "redirect:/manage/product?success=product";
+	}
+
+	
+	@RequestMapping(value = "/product/{id}/activation", method=RequestMethod.GET)
+	@ResponseBody
+	public String managePostProductActivation(@PathVariable int id) {		
+		Product product = productDAO.get(id);
+		boolean isActive = product.isActive();
+		product.setActive(!isActive);
+		productDAO.update(product);		
+		return (isActive)? "Product Dectivated Successfully!": "Product Activated Successfully";
+	}
+			
+
+	@RequestMapping(value = "/category", method=RequestMethod.POST)
+	public String managePostCategory(@ModelAttribute("category") Category mCategory, HttpServletRequest request) {					
+		categoryDAO.add(mCategory);		
+		return "redirect:" + request.getHeader("Referer") + "?success=category";
+	}
+			
+	
+	
+	@ModelAttribute("categories") 
+	public List<Category> modelCategories() {
+		return categoryDAO.list();
+	}
+	
+	@ModelAttribute("category")
+	public Category modelCategory() {
+		return new Category();
+	}
+	
+	
 }
+
+	
+
+
+
+	
