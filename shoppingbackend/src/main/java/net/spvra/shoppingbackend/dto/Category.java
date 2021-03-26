@@ -14,22 +14,6 @@ public class Category implements Serializable {
 	/**
 	 * 
 	 */
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
-	
-	private String name;
-	
-	private String description;
-	
-	@Column(name = "image_url")
-	private String imageURL;
-	
-	@Column(name = "is_active")
-	private boolean active = true;
-	
-	
 	private static final long serialVersionUID = 1L;
 
 	public int getId() {
@@ -73,6 +57,22 @@ public class Category implements Serializable {
 
 
 
+	/*
+	 * Private fields
+	 * */
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+	
+	private String name;
+	
+	private String description;
+	
+	@Column(name = "image_url")
+	private String imageURL;
+	
+	@Column(name = "is_active")
+	private boolean active = true;
 	
 	
 }
