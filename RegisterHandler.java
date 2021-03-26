@@ -1,0 +1,96 @@
+package net.spvra.smartshopping.handler;
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.binding.message.MessageBuilder;
+import org.springframework.binding.message.MessageContext;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
+
+import net.spvra.smartshopping.model.RegisterModel;
+import net.spvra.shoppingbackend.dao.UserDAO;
+import net.spvra.shoppingbackend.dto.Address;
+import net.spvra.shoppingbackend.dto.Cart;
+import net.spvra.shoppingbackend.dto.User;
+
+
+@Component
+public class RegisterHandler {
+
+
+ @Autowired
+ private PasswordEncoder passwordEncoder;
+	
+	
+ @Autowired
+ private UserDAO userDAO;
+ public RegisterModel init() { 
+  return new RegisterModel();
+ } 
+ public void addUser(RegisterModel registerModel, User user) {
+  registerModel.setUser(user);
+ } 
+ public void addBilling(RegisterModel registerModel, Address billing) {
+  registerModel.setBilling(billing);
+ }
+
+ public String validateUser(User user, MessageContext error) {
+	 
+	 
+	 //check whether the password is match confirm password
+  String transitionValue = "success";
+  		if(!user.getPassword()
+  				.equals(user.getConfirmPassword())) {
+    
+  			
+  			
+  			error.addMessage(new MessageBuilder()
+  					.error().
+  					source( "confirmPassword").
+  					defaultText("Password does not match confirm password!")
+  					.build());
+    
+  			transitionValue = "failure";    
+   }  
+  		
+  		
+  		//check the uniqueness of email id
+  		
+		   if(userDAO.getByEmail(user.getEmail())!=null) {
+			   
+			   
+			    transitionValue = "failure";
+			   
+		    error.addMessage(new MessageBuilder()
+		    		.error().
+		    		source("email")
+		    		.defaultText("Email address is already taken!")
+		    		.build());
+		
+		   }
+		  return transitionValue;
+		 }
+ 
+ public String saveAll(RegisterModel registerModel) {
+  String transitionValue = "success";
+  User user = registerModel.getUser();
+  if(user.getRole().equals("USER")) {
+   // create a new cart
+   Cart cart = new Cart();
+   cart.setUser(user);
+   user.setCart(cart);
+  }
+   
+  // encode the password
+  user.setPassword(passwordEncoder.encode(user.getPassword()));
+  
+  // save the user
+  userDAO.add(user);
+  // save the billing address
+  Address billing = registerModel.getBilling();
+  billing.setUserId(user.getId());
+  billing.setBilling(true);  
+  userDAO.addAddress(billing);
+  return transitionValue ;
+ } 
+}
