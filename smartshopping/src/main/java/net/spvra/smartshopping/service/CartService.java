@@ -6,14 +6,13 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import  net.spvra.smartshopping.model.UserModel;
+import net.spvra.smartshopping.model.UserModel;
 import net.spvra.shoppingbackend.dao.CartLineDAO;
 import net.spvra.shoppingbackend.dao.ProductDAO;
 import net.spvra.shoppingbackend.dao.UserDAO;
 import net.spvra.shoppingbackend.dto.Cart;
 import net.spvra.shoppingbackend.dto.CartLine;
 import net.spvra.shoppingbackend.dto.Product;
-
 @Service("cartService")
 public class CartService {
 

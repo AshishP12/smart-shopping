@@ -15,9 +15,17 @@ import net.spvra.shoppingbackend.dto.Product;
 @Controller
 @RequestMapping("/json/data")
 public class JsonDataController {
-	
+
 	@Autowired
-	private ProductDAO productDAO ;
+	private ProductDAO productDAO;
+	
+
+	@RequestMapping("/admin/all/products")
+	@ResponseBody
+	public List<Product> getAllProductsList() {		
+		return productDAO.list();
+				
+	}	
 	
 	
 	@RequestMapping("/all/products")
@@ -25,23 +33,31 @@ public class JsonDataController {
 	public List<Product> getAllProducts() {
 		
 		return productDAO.listActiveProducts();
-		
-	}
-	
-	@RequestMapping("/admin/all/products")
-	@ResponseBody
-	public List<Product> getAllProductsForAdmin() {
-		
-		return productDAO.list();
-		
+				
 	}
 	
 	@RequestMapping("/category/{id}/products")
 	@ResponseBody
-	public List<Product> getProductsByCategory( @PathVariable int id) {
+	public List<Product> getProductsByCategory(@PathVariable int id) {
 		
 		return productDAO.listActiveProductsByCategory(id);
-		
+				
 	}
-
+	
+	
+	@RequestMapping("/mv/products")
+	@ResponseBody
+	public List<Product> getMostViewedProducts() {		
+		return productDAO.getProductsByParam("views", 5);				
+	}
+		
+	@RequestMapping("/mp/products")
+	@ResponseBody
+	public List<Product> getMostPurchasedProducts() {		
+		return productDAO.getProductsByParam("purchases", 5);				
+	}
+	
+	
+	
+	
 }

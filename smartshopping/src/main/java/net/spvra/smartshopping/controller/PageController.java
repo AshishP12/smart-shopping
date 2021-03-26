@@ -21,8 +21,6 @@ import net.spvra.shoppingbackend.dao.ProductDAO;
 import net.spvra.shoppingbackend.dto.Category;
 import net.spvra.shoppingbackend.dto.Product;
 import net.spvra.smartshopping.exception.ProductNotFoundException;
-
-
 @Controller
 public class PageController {
 	

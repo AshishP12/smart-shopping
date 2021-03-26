@@ -9,6 +9,7 @@ import net.spvra.shoppingbackend.dto.CartLine;
 import net.spvra.shoppingbackend.dto.OrderDetail;
 import net.spvra.shoppingbackend.dto.User;
 
+
 public class CheckoutModel implements Serializable {
 
 	/**

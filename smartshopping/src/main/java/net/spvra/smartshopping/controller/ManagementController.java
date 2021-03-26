@@ -23,8 +23,9 @@ import net.spvra.shoppingbackend.dao.CategoryDAO;
 import net.spvra.shoppingbackend.dao.ProductDAO;
 import net.spvra.shoppingbackend.dto.Category;
 import net.spvra.shoppingbackend.dto.Product;
-import net.spvra.smartshopping.util.FileUploadUtility;
+import net.spvra.smartshopping.util.FileUtil;
 import net.spvra.smartshopping.validator.ProductValidator;
+
 
 @Controller
 @RequestMapping("/manage")
@@ -116,14 +117,14 @@ public class ManagementController {
 	
 		 //upload the file
 		 if(!mProduct.getFile().getOriginalFilename().equals("") ){
-			 FileUploadUtility.uploadFile(request, mProduct.getFile(), mProduct.getCode()); 
+			FileUtil.uploadFile(request, mProduct.getFile(), mProduct.getCode()); 
 		 }
 		
 		return "redirect:/manage/product?success=product";
 	}
 
 	
-	@RequestMapping(value = "/product/{id}/activation", method=RequestMethod.POST)
+	@RequestMapping(value = "/product/{id}/activation", method=RequestMethod.GET)
 	@ResponseBody
 	public String managePostProductActivation(@PathVariable int id) {		
 		Product product = productDAO.get(id);
